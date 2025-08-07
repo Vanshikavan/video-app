@@ -4,6 +4,6 @@ A feature-rich React web app that uses the **YouTube Data API** to fetch and dis
 ## 🔧 Features
 
 - 🎥 Fetches and displays video cards using **YouTube API**
-- 🔍 Search functionality for videos
+- 🔍 Search functionality for videos[with debouncing and caching]
 - 💬 Live chat simulation
 - 🧵 Dynamic nested comments
