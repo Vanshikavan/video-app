@@ -7,7 +7,8 @@ import { cacheResults } from '../assets/searchSlice';
 const Head = () => {
 
   const dispatch=useDispatch();
-  const searchCache=useSelector((store)=>store.search);
+  const searchCache = useSelector((store)=>store.search);
+  console.log(searchCache);
 
   const [searchQuery, setSearchQuery] =useState('');
   const [show,setShow]=useState(false);
