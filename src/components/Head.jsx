@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { toggle } from '../assets/appSlice';
 import { Link } from 'react-router';
@@ -16,6 +16,10 @@ const Head = () => {
 
   useEffect(()=>{
     const timer=setTimeout(()=>{
+      if(!searchQuery.trim()){
+        setSuggestions([]);
+        return;
+      }
       if(searchCache[searchQuery]){
         setSuggestions(searchCache[searchQuery])
       }
@@ -28,15 +32,27 @@ const Head = () => {
   },[searchQuery])
 
   const getSearchSuggestions = async() => {
-     console.log("Calling API for: ", searchQuery);
-    const data=await fetch(SEARCH_URL+searchQuery);
-    const json=await data.json()
-    setSuggestions(json[1])
-    dispatch(
-      cacheResults({
-        [searchQuery]:json[1],
-      })
-    )
+    if(!searchQuery.trim()) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      console.log("Calling API for: ", searchQuery);
+      const data = await fetch(SEARCH_URL + encodeURIComponent(searchQuery));
+      if (!data.ok) {
+        throw new Error(`API responded with status: ${data.status}`);
+      }
+      const json = await data.json();
+      setSuggestions(json[1] || []);
+      dispatch(
+        cacheResults({
+          [searchQuery]: json[1] || [],
+        })
+      );
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      setSuggestions([]);
+    }
   }
   
 
